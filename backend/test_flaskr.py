@@ -22,16 +22,17 @@ class TriviaTestCase(unittest.TestCase):
         self.client = self.app.test_client
         self.database_path = "postgres://{}:{}@{}/{}".format(
             DB_USER, DB_PASSWORD, 'localhost:5432', DB_TEST_NAME)
+        print(self.database_path)
         setup_db(self.app, self.database_path)
         self.new_question = {"question": "test1",
                              "answer": "test1", "difficulty": "5", "category": "5"}
 
-#         # binds the app to the current context
-#         with self.app.app_context():
-#             self.db = SQLAlchemy()
-#             self.db.init_app(self.app)
-#             # create all tables
-#             self.db.create_all()
+        # binds the app to the current context
+        with self.app.app_context():
+            self.db = SQLAlchemy()
+            self.db.init_app(self.app)
+            # create all tables
+            self.db.create_all()
 
     def tearDown(self):
         """Executed after reach test"""
@@ -69,7 +70,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertEqual(data["deleted"], 15)
         self.assertTrue(data["total_questions"])
-        self.assertTrue(len(data["books"]))
+        self.assertTrue(len(data["questions"]))
         self.assertEqual(question, None)
 
     def test_422_if_question_does_not_exist(self):
